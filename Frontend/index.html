@@ -3,27 +3,28 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>WhatsApp Automation</title>
+<title>WhatsApp Bulk Bot</title>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <header>
-<h1>WhatsApp Marketing Automation</h1>
+<h1>WhatsApp Bulk Messaging Bot</h1>
 </header>
 
 <div class="container">
-    <section class="intro">
-        <h2>🚀 Start WhatsApp Automation</h2>
-        <p>Upload contacts or add a single contact to start sending messages safely.</p>
-    </section>
+    <section class="input-section">
+        <label>Single Contact:</label>
+        <input type="text" id="singleContact" placeholder="Enter phone number">
 
-    <section class="upload-section">
         <label>Upload CSV Contacts:</label>
-        <input type="file" id="contactsFile" accept=".csv"/>
-        <button id="uploadBtn">Upload CSV</button>
+        <input type="file" id="csvFile" accept=".csv">
 
-        <label>Or Enter Single Contact:</label>
-        <input type="text" id="singleContact" placeholder="Enter phone number"/>
+        <label>Message:</label>
+        <textarea id="messageText" placeholder="Type your message"></textarea>
+
+        <label>Upload Media (Optional):</label>
+        <input type="file" id="mediaFile">
+
         <button id="startBtn">Start Automation</button>
 
         <p id="status"></p>
@@ -31,28 +32,30 @@
 </div>
 
 <footer>
-&copy; 2025 Midow Web Creator • All Rights Reserved
+&copy; 2025 Midow Web Creator
 </footer>
 
 <script>
-const uploadBtn = document.getElementById('uploadBtn');
 const startBtn = document.getElementById('startBtn');
 const status = document.getElementById('status');
 
-uploadBtn.addEventListener('click', async () => {
-    const fileInput = document.getElementById('contactsFile');
-    if (!fileInput.files.length) { alert('Select CSV first'); return; }
-    const formData = new FormData();
-    formData.append('contacts', fileInput.files[0]);
-    const res = await fetch('/api/upload', { method:'POST', body: formData });
-    const text = await res.text();
-    status.textContent = text;
-});
-
 startBtn.addEventListener('click', async () => {
-    const phone = document.getElementById('singleContact').value;
-    if (!phone) { alert('Enter a phone number'); return; }
-    const res = await fetch(`/api/send-demo?phone=${encodeURIComponent(phone)}`);
+    const singleContact = document.getElementById('singleContact').value;
+    const csvFile = document.getElementById('csvFile').files[0];
+    const messageText = document.getElementById('messageText').value;
+    const mediaFile = document.getElementById('mediaFile').files[0];
+
+    if(!singleContact && !csvFile) return alert('Enter number or upload CSV');
+
+    const formData = new FormData();
+    formData.append('singleContact', singleContact);
+    if(csvFile) formData.append('csvFile', csvFile);
+    formData.append('messageText', messageText);
+    if(mediaFile) formData.append('mediaFile', mediaFile);
+
+    status.textContent = "Sending...";
+
+    const res = await fetch('/api/sendMessage', { method: 'POST', body: formData });
     const text = await res.text();
     status.textContent = text;
 });
