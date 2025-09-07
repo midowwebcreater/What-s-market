@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WhatsApp Automation</title>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<header>
+<h1>WhatsApp Marketing Automation</h1>
+</header>
+
+<div class="container">
+    <section class="intro">
+        <h2>🚀 Start WhatsApp Automation</h2>
+        <p>Upload contacts or add a single contact to start sending messages safely.</p>
+    </section>
+
+    <section class="upload-section">
+        <label>Upload CSV Contacts:</label>
+        <input type="file" id="contactsFile" accept=".csv"/>
+        <button id="uploadBtn">Upload CSV</button>
+
+        <label>Or Enter Single Contact:</label>
+        <input type="text" id="singleContact" placeholder="Enter phone number"/>
+        <button id="startBtn">Start Automation</button>
+
+        <p id="status"></p>
+    </section>
+</div>
+
+<footer>
+&copy; 2025 Midow Web Creator • All Rights Reserved
+</footer>
+
+<script>
+const uploadBtn = document.getElementById('uploadBtn');
+const startBtn = document.getElementById('startBtn');
+const status = document.getElementById('status');
+
+uploadBtn.addEventListener('click', async () => {
+    const fileInput = document.getElementById('contactsFile');
+    if (!fileInput.files.length) { alert('Select CSV first'); return; }
+    const formData = new FormData();
+    formData.append('contacts', fileInput.files[0]);
+    const res = await fetch('/api/upload', { method:'POST', body: formData });
+    const text = await res.text();
+    status.textContent = text;
+});
+
+startBtn.addEventListener('click', async () => {
+    const phone = document.getElementById('singleContact').value;
+    if (!phone) { alert('Enter a phone number'); return; }
+    const res = await fetch(`/api/send-demo?phone=${encodeURIComponent(phone)}`);
+    const text = await res.text();
+    status.textContent = text;
+});
+</script>
+</body>
+</html>
