@@ -1,47 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>WhatsApp Marketing Automation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WhatsApp Marketing Automation</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <header>
-        <h1>WhatsApp Marketing Automation</h1>
-    </header>
+<header>
+<h1>WhatsApp Marketing Automation</h1>
+</header>
 
-    <div class="container">
-        <section class="intro">
-            <h2>🚀 Professional 3D WhatsApp Automation</h2>
-            <p>Send personalized WhatsApp messages safely & easily using our 3D animated professional interface. Manage contacts, create campaigns, and automate bulk messaging—all in a modern, engaging design.</p>
-        </section>
+<div class="container">
+    <section class="intro">
+        <h2>🚀 Professional 3D WhatsApp Automation</h2>
+        <p>Upload contacts and send messages safely via our modern 3D interface.</p>
+    </section>
 
-        <section class="features">
-            <div class="feature-box">
-                <h3>📊 Bulk Messaging</h3>
-                <p>Send thousands of messages daily with safe delays to avoid bans.</p>
-            </div>
-            <div class="feature-box">
-                <h3>📝 Opt-in Management</h3>
-                <p>Keep your customer consent safe and organized.</p>
-            </div>
-            <div class="feature-box">
-                <h3>⚡ Fast Setup</h3>
-                <p>Upload CSV contacts and create templates instantly.</p>
-            </div>
-            <div class="feature-box">
-                <h3>📱 Familiar Design</h3>
-                <p>WhatsApp-like theme with 3D animated feel for trust & engagement.</p>
-            </div>
-        </section>
+    <section class="upload-section">
+        <input type="file" id="contactsFile" accept=".csv"/>
+        <button id="uploadBtn">Upload Contacts</button>
+        <input type="text" id="phoneNumber" placeholder="Enter Phone Number"/>
+        <button id="sendBtn">Send Demo Message</button>
+        <p id="status"></p>
+    </section>
+</div>
 
-        <a href="#" class="button">Start Free Trial</a>
-    </div>
+<footer>
+&copy; 2025 Midow Web Creator • All Rights Reserved
+</footer>
 
-    <footer>
-        &copy; 2025 Midow Web Creator • All Rights Reserved
-    </footer>
+<script>
+const uploadBtn = document.getElementById('uploadBtn');
+const sendBtn = document.getElementById('sendBtn');
+const status = document.getElementById('status');
+
+uploadBtn.addEventListener('click', async () => {
+    const fileInput = document.getElementById('contactsFile');
+    if (!fileInput.files.length) { alert('Select CSV first'); return; }
+    const formData = new FormData();
+    formData.append('contacts', fileInput.files[0]);
+    const res = await fetch('/api/upload', { method:'POST', body: formData });
+    const text = await res.text();
+    status.textContent = text;
+});
+
+sendBtn.addEventListener('click', async () => {
+    const phone = document.getElementById('phoneNumber').value;
+    if (!phone) { alert('Enter phone number'); return; }
+    const res = await fetch(`/api/send-demo?phone=${encodeURIComponent(phone)}`);
+    const text = await res.text();
+    status.textContent = text;
+});
+</script>
 </body>
 </html>
