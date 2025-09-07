@@ -1,0 +1,9 @@
+{
+  "name": "whatsapp-marketing-system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "formidable": "^2.1.1"
+  }
+}
